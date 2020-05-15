@@ -19,7 +19,7 @@ restService.post("/echo", function(req, res) {
     req.body.queryResult.parameters &&
     req.body.queryResult.parameters.echoText
       ? req.body.queryResult.parameters.echoText
-      : "Il y a un probleme, répétez s'il vous plait.";
+      : "Mister Pizza n'a pas comprit votre demande.";
   
   var speechResponse = {
     google: {
