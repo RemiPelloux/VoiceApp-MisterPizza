@@ -14,12 +14,14 @@ restService.use(
 restService.use(bodyParser.json());
 
 restService.post("/echo", function(req, res) {
+  var reponseMessage = req.body.queryResult.parameters.nom-pizza;
+
   var speech =
     req.body.queryResult &&
     req.body.queryResult.parameters &&
-    req.body.queryResult.parameters.echoText
-      ? req.body.queryResult.parameters.echoText
-      : "Mister Pizza n'a pas comprit votre demande.";
+    req.body.queryResult.parameters.nom-pizza
+      ? req.body.queryResult.parameters.nom-pizza
+      : reponseMessage ;
   
   var speechResponse = {
     google: {
@@ -42,7 +44,7 @@ restService.post("/echo", function(req, res) {
     fulfillmentText: speech,
     speech: speech,
     displayText: speech,
-    source: "webhook-echo-sample"
+    source: "Mister Pizza Voice"
   });
 });
 
