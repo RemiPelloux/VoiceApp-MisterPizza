@@ -13,13 +13,13 @@ restService.use(
 
 restService.use(bodyParser.json());
 
-restService.post("/pizza-ingredients", function(req, res) {
+restService.post("/echo", function(req, res) {
   var speech =
     req.body.queryResult &&
     req.body.queryResult.parameters &&
-    req.body.queryResult.parameters.nom-pizza
-      ? req.body.queryResult.parameters.nom-pizza
-      : "Pizza : "
+    req.body.queryResult.parameters.echoText
+      ? req.body.queryResult.parameters.echoText
+      : "Seems like some problem. Speak again.";
   
   var speechResponse = {
     google: {
@@ -42,7 +42,7 @@ restService.post("/pizza-ingredients", function(req, res) {
     fulfillmentText: speech,
     speech: speech,
     displayText: speech,
-    source: "Mister Pizza Voice App"
+    source: "webhook-echo-sample"
   });
 });
 
