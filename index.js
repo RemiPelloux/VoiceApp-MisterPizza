@@ -2,9 +2,9 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
-
+const https = require('https');
 const restService = express();
-
+const baseURL = "https://adwatch.fr/misterpizza/"
 restService.use(
   bodyParser.urlencoded({
     extended: true
@@ -13,13 +13,39 @@ restService.use(
 
 restService.use(bodyParser.json());
 
+function getInfoApi(pizza) {
+  https.get(baseURL + '?pizza=' + pizza + '&ingredient=true', (resp) => {
+    let data = '';
+
+    // A chunk of data has been recieved.
+    resp.on('data', (chunk) => {
+      data += chunk;
+    });
+
+    // The whole response has been received. Print out the result.
+    resp.on('end', () => {
+      console.log(JSON.parse(data));
+      return JSON.parse(data)
+    });
+
+  }).on("error", (err) => {
+    console.log("Error: " + err.message);
+  });
+}
+
+getInfoApi('Buffalo');
+
+
+
 restService.post("/echo", function(req, res) {
-  var speech =
-    req.body.queryResult &&
-    req.body.queryResult.parameters &&
-    req.body.queryResult.parameters.echoText
-      ? req.body.queryResult.parameters.echoText
-      : "Houston, on a un soucis.";
+  var speech;
+  if (req.body.queryResult &&
+      req.body.queryResult.parameters &&
+      req.body.queryResult.parameters.echoText) {
+    speech = getInfoApi(req.body.queryResult.parameters.echoText);
+  } else {
+    speech = "Houston, on a un soucis.";
+  }
   
   var speechResponse = {
     google: {
