@@ -21,7 +21,7 @@ restService.post("/echo", function(req, res) {
     req.body.queryResult.parameters &&
     req.body.queryResult.parameters.nom-pizza
       ? req.body.queryResult.parameters.nom-pizza
-      : "Mister Pizza n'a pas comprit votre demande.";
+      : "Vous voulez une" + req.body.queryResult.parameters.nom-pizza;
   
   var speechResponse = {
     google: {
