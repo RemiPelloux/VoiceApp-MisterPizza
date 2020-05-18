@@ -19,7 +19,7 @@ restService.post("/pizza-ingredients", function(req, res) {
     req.body.queryResult.parameters &&
     req.body.queryResult.parameters.nom-pizza
       ? req.body.queryResult.parameters.nom-pizza
-      : "Pizza : " + req.body.queryResult.parameters.nom-pizza;
+      : "Pizza : "
   
   var speechResponse = {
     google: {
