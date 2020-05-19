@@ -33,7 +33,7 @@ function getInfoApi(pizza) {
   });
 }
 
-getInfoApi('Buffalo');
+//getInfoApi('Buffalo');
 
 
 
@@ -68,7 +68,7 @@ restService.post("/echo", function(req, res) {
     fulfillmentText: speech,
     speech: speech,
     displayText: speech,
-    source: "webhook-echo-sample"
+    source: "MisterPizza Voice app"
   });
 });
 
@@ -241,5 +241,5 @@ restService.post("/slack-test", function(req, res) {
 });
 
 restService.listen(process.env.PORT || 8000, function() {
-  console.log("Server up and listening");
+  console.log("[+] Serveur opérationnel");
 });
