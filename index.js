@@ -20,7 +20,7 @@ function buildUrl(nomPizza, parametres) {
     baseURL = "https://adwatch.fr/misterpizza/";
     baseURL += "?pizza=" + nomPizza + "&"
     switch (parametres) {
-        case 'ingredient':
+        case 'pizza.ingredients':
             baseURL += "ingredient=true"
             break
         case 'name':
@@ -36,7 +36,7 @@ function buildUrl(nomPizza, parametres) {
             baseURL += "promo=true"
             break
     }
-    //console.log("URL : " + baseURL)
+    // console.log("URL : " + baseURL)
     return baseURL
 }
 
@@ -62,18 +62,17 @@ function getInfoApi() {
 }
 
 
-
 function pizzaIngredient(data) {
     //console.log(JSON.parse(data).Armenienne)
     //console.log("Pizza ingredient : " + data)
-    console.log(JSON.parse(data))
+    //console.log(JSON.parse(data))
     return JSON.parse(data)
 }
 
 var speechResponse = "";
 
-function generateGoogleResponse(data){
-    console.log("generateGoogleResponse : " + data)
+function generateGoogleResponse(data) {
+    //console.log("generateGoogleResponse : " + data)
     speechResponse = {
         google: {
             expectUserResponse: true,
@@ -92,24 +91,26 @@ function generateGoogleResponse(data){
 }
 
 restService.post("/echo", function (req, res) {
-    if (req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.echoText) {
+    if (req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.nomPizza) {
         var speech = "";
-        //speechResponse = "";
-        //var speechResponse;
-        var pizzaName = req.body.queryResult.parameters.echoText
-        buildUrl(pizzaName, 'ingredient')
-        //console.log(pizzaName)
+        //console.log(req.body.queryResult.parameters.nomPizza)
+        var pizzaName = req.body.queryResult.parameters.nomPizza
+
+        var intentContext = req.body.queryResult.intent.displayName
+        //console.log(intentContext)
+
+        buildUrl(pizzaName, intentContext)
 
         const myPromise = getInfoApi()
 
         myPromise
             .then(pizzaIngredient)
-            .catch( () => {
+            .catch(() => {
                 speech = "Houston Pizza, on a un soucis.";
                 console.error('[+] ERREUR')
             })
             .then(generateGoogleResponse)
-            .then( () => {
+            .then(() => {
                 return res.json({
                     payload: speechResponse,
                     //data: speechResponse,
