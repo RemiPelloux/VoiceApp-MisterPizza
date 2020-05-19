@@ -17,6 +17,7 @@ restService.use(bodyParser.json());
 
 function buildUrl(nomPizza, parametres) {
     //buildUrl('Armenienne', 'ingredient')
+    baseURL = "https://adwatch.fr/misterpizza/";
     baseURL += "?pizza=" + nomPizza + "&"
     switch (parametres) {
         case 'ingredient':
@@ -35,7 +36,7 @@ function buildUrl(nomPizza, parametres) {
             baseURL += "promo=true"
             break
     }
-
+    //console.log("URL : " + baseURL)
     return baseURL
 }
 
@@ -54,7 +55,7 @@ function getInfoApi() {
             });
 
         }).on("error", (err) => {
-            console.log("Error: " + err.message);
+            //console.log("Error: " + err.message);
             reject("Error: " + err.message);
         });
     })
@@ -64,13 +65,15 @@ function getInfoApi() {
 
 function pizzaIngredient(data) {
     //console.log(JSON.parse(data).Armenienne)
+    //console.log("Pizza ingredient : " + data)
     console.log(JSON.parse(data))
     return JSON.parse(data)
 }
 
-var speechResponse;
+var speechResponse = "";
 
 function generateGoogleResponse(data){
+    console.log("generateGoogleResponse : " + data)
     speechResponse = {
         google: {
             expectUserResponse: true,
@@ -90,11 +93,15 @@ function generateGoogleResponse(data){
 
 restService.post("/echo", function (req, res) {
     if (req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.echoText) {
-        var speech;
+        var speech = "";
+        //speechResponse = "";
         //var speechResponse;
         var pizzaName = req.body.queryResult.parameters.echoText
         buildUrl(pizzaName, 'ingredient')
+        //console.log(pizzaName)
+
         const myPromise = getInfoApi()
+
         myPromise
             .then(pizzaIngredient)
             .catch( () => {
