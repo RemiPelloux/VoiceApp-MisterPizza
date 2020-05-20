@@ -148,9 +148,6 @@ restService.post("/echo", function (req, res) {
         var intentContext = req.body.queryResult.intent.displayName
         console.log(intentContext)
 
-        if (intentContext === "pizza.remi") {
-            speech = '<speak><audio src="https://actions.google.com/sounds/v1/cartoon/slide_whistle.ogg">did not get your audio file</audio></speak>';
-        }
 
         if (intentContext === "pizza.promos") {
             buildUrl('', intentContext)
@@ -224,6 +221,35 @@ restService.post("/echo", function (req, res) {
 
     }
 
+    if (intentContext === "pizza.remi") {
+        console.log('i m here')
+        speech = '<speak><audio src="https://actions.google.com/sounds/v1/cartoon/slide_whistle.ogg">did not get your audio file</audio></speak>';
+
+        speechResponse = {
+            google: {
+                expectUserResponse: true,
+                richResponse: {
+                    items: [
+                        {
+                            simpleResponse: {
+                                textToSpeech: speech
+                            }
+                        }
+                    ]
+                }
+            }
+        };
+
+        return res.json({
+            payload: speechResponse,
+            //data: speechResponse,
+            fulfillmentText: speech,
+            speech: speech,
+            displayText: speech,
+            source: "MisterPizza Voice app"
+        });
+
+    }
 
 });
 
