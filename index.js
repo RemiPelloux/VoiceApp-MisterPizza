@@ -15,10 +15,13 @@ restService.use(
 
 restService.use(bodyParser.json());
 
-function buildUrl(nomPizza, parametres) {
+function buildUrl(nomPizza, parametres, cb) {
     //buildUrl('Armenienne', 'ingredient')
     baseURL = "https://adwatch.fr/misterpizza/";
     baseURL += "?pizza=" + nomPizza + "&"
+    if(cb) {
+        parametres = cb;
+    }
     switch (parametres) {
         case 'pizza.ingredients':
             baseURL += "ingredient=true"
@@ -26,10 +29,10 @@ function buildUrl(nomPizza, parametres) {
         case 'name':
             baseURL += "name=true"
             break
-        case 'price_mega':
+        case 'Méga':
             baseURL += "price_mega=true"
             break
-        case 'price_normale':
+        case 'Normal':
             baseURL += "price_normale=true"
             break
         case 'promo':
@@ -62,7 +65,6 @@ function getInfoApi() {
         });
     })
 }
-
 
 function pizzaDataAPI(data) {
     //console.log(JSON.parse(data).Armenienne)
@@ -102,14 +104,13 @@ restService.post("/echo", function (req, res) {
         //console.log(intentContext)
 
         if(intentContext === "pizza.price") {
-
+            var taillePizza = req.body.queryResult.parameters.taillePizza
+            buildUrl(pizzaName, intentContext, taillePizza)
         }
         if (intentContext === "pizza.ingredients") {
             buildUrl(pizzaName, intentContext)
         }
-        else{
-           speech = "Erreur de contexte"
-        }
+
 
 
         const myPromise = getInfoApi()
