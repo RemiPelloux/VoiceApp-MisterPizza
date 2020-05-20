@@ -253,7 +253,7 @@ restService.post("/echo", function (req, res) {
 
     if (intentContext === "pizza.boiteauto") {
         console.log('i m here')
-        speech = '<speak><audio src="https://actions.google.com/sounds/v1/cartoon/vomit_in_bathroom.ogg">Blurp..</audio></speak>';
+        speech = '<speak><audio src="https://actions.google.com/sounds/v1/cartoon/long_fart.ogg">Blurp..</audio></speak>';
 
         speechResponse = {
             google: {
