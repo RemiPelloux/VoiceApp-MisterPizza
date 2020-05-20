@@ -251,6 +251,36 @@ restService.post("/echo", function (req, res) {
 
     }
 
+    if (intentContext === "pizza.boiteauto") {
+        console.log('i m here')
+        speech = '<speak><audio src="https://actions.google.com/sounds/v1/cartoon/vomit_in_bathroom.ogg">Blurp..</audio></speak>';
+
+        speechResponse = {
+            google: {
+                expectUserResponse: true,
+                richResponse: {
+                    items: [
+                        {
+                            simpleResponse: {
+                                textToSpeech: speech
+                            }
+                        }
+                    ]
+                }
+            }
+        };
+
+        return res.json({
+            payload: speechResponse,
+            //data: speechResponse,
+            fulfillmentText: speech,
+            speech: speech,
+            displayText: speech,
+            source: "MisterPizza Voice app"
+        });
+
+    }
+
 });
 
 restService.post("/audio", function (req, res) {
