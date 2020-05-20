@@ -148,6 +148,10 @@ restService.post("/echo", function (req, res) {
         var intentContext = req.body.queryResult.intent.displayName
         console.log(intentContext)
 
+        if (intentContext === "pizza.remi") {
+            speech = '<speak><audio src="https://actions.google.com/sounds/v1/cartoon/slide_whistle.ogg">did not get your audio file</audio></speak>';
+        }
+
         if (intentContext === "pizza.promos") {
             buildUrl('', intentContext)
             const myPromise = getInfoApi()
@@ -216,10 +220,7 @@ restService.post("/echo", function (req, res) {
                 })
         }
 
-        if (intentContext === "pizza.remi") {
-            speech = '<speak><audio src="https://actions.google.com/sounds/v1/cartoon/slide_whistle.ogg">did not get your audio file</audio></speak>';
 
-        }
 
     }
 
