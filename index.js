@@ -18,7 +18,9 @@ restService.use(bodyParser.json());
 function buildUrl(nomPizza, parametres, cb) {
     //buildUrl('Armenienne', 'ingredient')
     baseURL = "https://adwatch.fr/misterpizza/";
-    baseURL += "?pizza=" + nomPizza + "&"
+    if(nomPizza !== '') {
+        baseURL += "?pizza=" + nomPizza + "&"
+    }
     if(cb) {
         parametres = cb;
     }
@@ -35,8 +37,8 @@ function buildUrl(nomPizza, parametres, cb) {
         case 'Normal':
             baseURL += "price_normale=true"
             break
-        case 'promo':
-            baseURL += "promo=true"
+        case 'pizza.promos':
+            baseURL += "?promo=true"
             break
     }
     //console.log("URL : " + baseURL)
@@ -96,6 +98,7 @@ function generateGoogleResponseIngredient(data) {
 
 function generateGoogleResponsePrice(data) {
     data = data.replace('&nbsp;&euro;', ' euro')
+    data = data.replace('.', ',')
     console.log("generateGoogleResponse : " + data)
 
     speechResponse = {
@@ -115,14 +118,56 @@ function generateGoogleResponsePrice(data) {
     return speechResponse
 }
 
+function generateGoogleResponsePromos(data) {
+    console.log("generateGoogleResponse : " + data)
+
+    speechResponse = {
+        google: {
+            expectUserResponse: true,
+            richResponse: {
+                items: [
+                    {
+                        simpleResponse: {
+                            textToSpeech: data
+                        }
+                    }
+                ]
+            }
+        }
+    };
+
+    return speechResponse
+}
+
 restService.post("/echo", function (req, res) {
-    if (req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.nomPizza) {
+    if (req.body.queryResult && req.body.queryResult.parameters) {
         var speech = "";
 
         var pizzaName = req.body.queryResult.parameters.nomPizza
 
         var intentContext = req.body.queryResult.intent.displayName
-        //console.log(intentContext)
+        console.log(intentContext)
+
+        if(intentContext === "pizza.promos") {
+            buildUrl('', intentContext)
+            const myPromise = getInfoApi()
+
+            myPromise
+                .then(pizzaDataAPI)
+
+                .then(generateGoogleResponsePromos)
+
+                .then(() => {
+                    return res.json({
+                        payload: speechResponse,
+                        //data: speechResponse,
+                        fulfillmentText: speech,
+                        speech: speech,
+                        displayText: speech,
+                        source: "MisterPizza Voice app"
+                    });
+                })
+        }
 
         if(intentContext === "pizza.price") {
             var taillePizza = req.body.queryResult.parameters.taillePizza
