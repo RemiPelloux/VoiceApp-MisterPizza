@@ -36,7 +36,7 @@ function buildUrl(nomPizza, parametres) {
             baseURL += "promo=true"
             break
     }
-    // console.log("URL : " + baseURL)
+    //console.log("URL : " + baseURL)
     return baseURL
 }
 
@@ -44,6 +44,7 @@ function buildUrl(nomPizza, parametres) {
 function getInfoApi() {
     return new Promise(function (resolve, reject) {
         https.get(baseURL, (resp) => {
+            console.log(baseURL)
             let data = '';
 
             resp.on('data', (chunk) => {
@@ -51,6 +52,7 @@ function getInfoApi() {
             });
 
             resp.on('end', () => {
+                console.log("data " + data)
                 resolve(data)
             });
 
@@ -64,15 +66,15 @@ function getInfoApi() {
 
 function pizzaIngredient(data) {
     //console.log(JSON.parse(data).Armenienne)
-    //console.log("Pizza ingredient : " + data)
-    //console.log(JSON.parse(data))
+    console.log("Pizza ingredient : " + data)
+    console.log(JSON.parse(data))
     return JSON.parse(data)
 }
 
 var speechResponse = "";
 
 function generateGoogleResponse(data) {
-    //console.log("generateGoogleResponse : " + data)
+    console.log("generateGoogleResponse : " + data)
     speechResponse = {
         google: {
             expectUserResponse: true,
@@ -93,7 +95,7 @@ function generateGoogleResponse(data) {
 restService.post("/echo", function (req, res) {
     if (req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.nomPizza) {
         var speech = "";
-        //console.log(req.body.queryResult.parameters.nomPizza)
+
         var pizzaName = req.body.queryResult.parameters.nomPizza
 
         var intentContext = req.body.queryResult.intent.displayName
