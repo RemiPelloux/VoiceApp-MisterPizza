@@ -216,6 +216,10 @@ restService.post("/echo", function (req, res) {
                 })
         }
 
+        if (intentContext === "pizza.remi") {
+            speech = '<speak><audio src="https://actions.google.com/sounds/v1/cartoon/slide_whistle.ogg">did not get your audio file</audio></speak>';
+
+        }
 
     }
 
@@ -325,70 +329,6 @@ restService.post("/video", function (req, res) {
     });
 });
 
-restService.post("/slack-test", function (req, res) {
-    var slack_message = {
-        text: "Details of JIRA board for Browse and Commerce",
-        attachments: [
-            {
-                title: "JIRA Board",
-                title_link: "http://www.google.com",
-                color: "#36a64f",
-
-                fields: [
-                    {
-                        title: "Epic Count",
-                        value: "50",
-                        short: "false"
-                    },
-                    {
-                        title: "Story Count",
-                        value: "40",
-                        short: "false"
-                    }
-                ],
-
-                thumb_url:
-                    "https://stiltsoft.com/blog/wp-content/uploads/2016/01/5.jira_.png"
-            },
-            {
-                title: "Story status count",
-                title_link: "http://www.google.com",
-                color: "#f49e42",
-
-                fields: [
-                    {
-                        title: "Not started",
-                        value: "50",
-                        short: "false"
-                    },
-                    {
-                        title: "Development",
-                        value: "40",
-                        short: "false"
-                    },
-                    {
-                        title: "Development",
-                        value: "40",
-                        short: "false"
-                    },
-                    {
-                        title: "Development",
-                        value: "40",
-                        short: "false"
-                    }
-                ]
-            }
-        ]
-    };
-    return res.json({
-        speech: "speech",
-        displayText: "speech",
-        source: "webhook-echo-sample",
-        data: {
-            slack: slack_message
-        }
-    });
-});
 
 restService.listen(process.env.PORT || 8000, function () {
     console.log("[+] Serveur opérationnel");
