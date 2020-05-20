@@ -64,9 +64,9 @@ function getInfoApi() {
 }
 
 
-function pizzaIngredient(data) {
+function pizzaDataAPI(data) {
     //console.log(JSON.parse(data).Armenienne)
-    console.log("Pizza ingredient : " + data)
+    //console.log("Pizza ingredient : " + data)
     console.log(JSON.parse(data))
     return JSON.parse(data)
 }
@@ -101,12 +101,21 @@ restService.post("/echo", function (req, res) {
         var intentContext = req.body.queryResult.intent.displayName
         //console.log(intentContext)
 
-        buildUrl(pizzaName, intentContext)
+        if(intentContext === "pizza.price") {
+
+        }
+        if (intentContext === "pizza.ingredients") {
+            buildUrl(pizzaName, intentContext)
+        }
+        else{
+           speech = "Erreur de contexte"
+        }
+
 
         const myPromise = getInfoApi()
 
         myPromise
-            .then(pizzaIngredient)
+            .then(pizzaDataAPI)
             .catch(() => {
                 speech = "Houston Pizza, on a un soucis.";
                 console.error('[+] ERREUR')
