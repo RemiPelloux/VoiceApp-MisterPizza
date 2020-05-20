@@ -75,8 +75,29 @@ function pizzaDataAPI(data) {
 
 var speechResponse = "";
 
-function generateGoogleResponse(data) {
+function generateGoogleResponseIngredient(data) {
     console.log("generateGoogleResponse : " + data)
+    speechResponse = {
+        google: {
+            expectUserResponse: true,
+            richResponse: {
+                items: [
+                    {
+                        simpleResponse: {
+                            textToSpeech: data
+                        }
+                    }
+                ]
+            }
+        }
+    };
+    return speechResponse
+}
+
+function generateGoogleResponsePrice(data) {
+    data = data.replace('&nbsp;&euro;', ' euro')
+    console.log("generateGoogleResponse : " + data)
+
     speechResponse = {
         google: {
             expectUserResponse: true,
@@ -106,32 +127,51 @@ restService.post("/echo", function (req, res) {
         if(intentContext === "pizza.price") {
             var taillePizza = req.body.queryResult.parameters.taillePizza
             buildUrl(pizzaName, intentContext, taillePizza)
+            const myPromise = getInfoApi()
+
+            myPromise
+                .then(pizzaDataAPI)
+                .catch(() => {
+                    speech = "Houston Pizza, on a un soucis.";
+                    console.error('[+] ERREUR')
+                })
+                .then(generateGoogleResponsePrice)
+                .then(() => {
+                    return res.json({
+                        payload: speechResponse,
+                        //data: speechResponse,
+                        fulfillmentText: speech,
+                        speech: speech,
+                        displayText: speech,
+                        source: "MisterPizza Voice app"
+                    });
+                })
         }
+
         if (intentContext === "pizza.ingredients") {
             buildUrl(pizzaName, intentContext)
+            const myPromise = getInfoApi()
+
+            myPromise
+                .then(pizzaDataAPI)
+                .catch(() => {
+                    speech = "Houston Pizza, on a un soucis.";
+                    console.error('[+] ERREUR')
+                })
+                .then(generateGoogleResponseIngredient)
+                .then(() => {
+                    return res.json({
+                        payload: speechResponse,
+                        //data: speechResponse,
+                        fulfillmentText: speech,
+                        speech: speech,
+                        displayText: speech,
+                        source: "MisterPizza Voice app"
+                    });
+                })
         }
 
 
-
-        const myPromise = getInfoApi()
-
-        myPromise
-            .then(pizzaDataAPI)
-            .catch(() => {
-                speech = "Houston Pizza, on a un soucis.";
-                console.error('[+] ERREUR')
-            })
-            .then(generateGoogleResponse)
-            .then(() => {
-                return res.json({
-                    payload: speechResponse,
-                    //data: speechResponse,
-                    fulfillmentText: speech,
-                    speech: speech,
-                    displayText: speech,
-                    source: "MisterPizza Voice app"
-                });
-            })
 
 
     }
