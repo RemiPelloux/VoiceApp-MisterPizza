@@ -18,10 +18,10 @@ restService.use(bodyParser.json());
 function buildUrl(nomPizza, parametres, cb) {
     //buildUrl('Armenienne', 'ingredient')
     baseURL = "https://adwatch.fr/misterpizza/";
-    if(nomPizza !== '') {
+    if (nomPizza !== '') {
         baseURL += "?pizza=" + nomPizza + "&"
     }
-    if(cb) {
+    if (cb) {
         parametres = cb;
     }
     switch (parametres) {
@@ -148,7 +148,7 @@ restService.post("/echo", function (req, res) {
         var intentContext = req.body.queryResult.intent.displayName
         console.log(intentContext)
 
-        if(intentContext === "pizza.promos") {
+        if (intentContext === "pizza.promos") {
             buildUrl('', intentContext)
             const myPromise = getInfoApi()
 
@@ -169,7 +169,7 @@ restService.post("/echo", function (req, res) {
                 })
         }
 
-        if(intentContext === "pizza.price") {
+        if (intentContext === "pizza.price") {
             var taillePizza = req.body.queryResult.parameters.taillePizza
             buildUrl(pizzaName, intentContext, taillePizza)
             const myPromise = getInfoApi()
@@ -215,8 +215,6 @@ restService.post("/echo", function (req, res) {
                     });
                 })
         }
-
-
 
 
     }
